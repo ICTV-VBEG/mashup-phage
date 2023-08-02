@@ -25,9 +25,11 @@ rule mash_sketch:
         prefix=lambda wc , output: os.path.splitext( output.msh )[0],
      conda:
         "envs/mash.yaml"
+     threads:
+          6
      shell:
         """
-        mash sketch -i -k 15 -s 25000 -p 24 -o {params.prefix} {input[0]}
+        mash sketch -i -k 15 -s 25000 -p {threads} -o {params.prefix} {input[0]}
         """
 
 rule mash_dist:
@@ -37,8 +39,10 @@ rule mash_dist:
         tsv="results/mash/{genome_fasta}.d0.3.k15.s25000.tsv"
      conda:
         "envs/mash.yaml"
+     threads:
+          6
      shell:
         """
-        mash dist -i -d 0.3 -p 24 {input.msh} {input.msh} \
+        mash dist -i -d 0.3 -p {threads} {input.msh} {input.msh} \
         > {output.tsv}
         """
