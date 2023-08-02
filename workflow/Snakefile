@@ -7,6 +7,8 @@ rule all:
         #tsv="results/mash/2Jul2023_refseq_genomes.d0.3.k15.s25000.tsv"
 
 
+# TODO: use inphared download wrapper once available, for progress see:
+#       https://github.com/snakemake/snakemake-wrappers/pull/1550
 rule download:
      output:
         "resources/{genome_fasta}.fa",
