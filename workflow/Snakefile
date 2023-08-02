@@ -1,50 +1,50 @@
-
 import os
+
 
 rule all:
     input:
-        tsv="results/mash/three-aeromonas-phage-genomes.d0.3.k15.s25000.tsv"
         #tsv="results/mash/2Jul2023_refseq_genomes.d0.3.k15.s25000.tsv"
+        tsv="results/mash/three-aeromonas-phage-genomes.d0.3.k15.s25000.tsv",
 
 
 # TODO: use inphared download wrapper once available, for progress see:
 #       https://github.com/snakemake/snakemake-wrappers/pull/1550
 rule download:
-     output:
+    output:
         "resources/{genome_fasta}.fa",
-     shell:
+    shell:
         """
         curl -O https://millardlab-inphared.s3.climb.ac.uk/{wildcards.genome_fasta}.fa.gz;
         gunzip {wildcards.genome_fasta}.fa.gz;
         mv {wildcards.genome_fasta}.fa {output[0]}
         """
 
+
 rule mash_sketch:
-     input:
+    input:
         "resources/{genome_fasta}.fa",
-     output:
+    output:
         msh="results/mash/{genome_fasta}.fa.msh",
-     params:
-        prefix=lambda wc , output: os.path.splitext( output.msh )[0],
-     conda:
+    params:
+        prefix=lambda wc, output: os.path.splitext(output.msh)[0],
+    conda:
         "envs/mash.yaml"
-     threads:
-          6
-     shell:
+    threads: 6
+    shell:
         """
         mash sketch -i -k 15 -s 25000 -p {threads} -o {params.prefix} {input[0]}
         """
 
+
 rule mash_dist:
-     input:
+    input:
         msh="results/mash/{genome_fasta}.fa.msh",
-     output:
-        tsv="results/mash/{genome_fasta}.d0.3.k15.s25000.tsv"
-     conda:
+    output:
+        tsv="results/mash/{genome_fasta}.d0.3.k15.s25000.tsv",
+    conda:
         "envs/mash.yaml"
-     threads:
-          6
-     shell:
+    threads: 6
+    shell:
         """
         mash dist -i -d 0.3 -p {threads} {input.msh} {input.msh} \
         > {output.tsv}
