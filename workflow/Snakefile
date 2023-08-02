@@ -4,7 +4,12 @@ import os
 rule all:
     input:
         #tsv="results/mash/2Jul2023_refseq_genomes.d0.3.k15.s25000.tsv"
-        tsv="results/mash/three-aeromonas-phage-genomes.d0.3.k15.s25000.tsv",
+        tsv=expand(
+            "results/mash/three-aeromonas-phage-genomes.s{mash_s}.k{mash_k}.s{mash_s}.tsv",
+            mash_k=config["mash"]["sketch"]["k"]
+            mash_s=config["mash"]["sketch"]["s"]
+            mash_d=config["mash"]["dist"]["d"]
+        ),
 
 
 # TODO: use inphared download wrapper once available, for progress see:
@@ -24,33 +29,28 @@ rule mash_sketch:
     input:
         "resources/{genome_fasta}.fa",
     output:
-        msh="results/mash/{genome_fasta}.fa.msh",
+        msh="results/mash/{genome_fasta}.k{mash_k}.s{mash_s}.fa.msh",
     params:
         prefix=lambda wc, output: os.path.splitext(output.msh)[0],
     conda:
         "envs/mash.yaml"
-    params:
-        k=config["mash"]["sketch"]["k"]
-        s=config["mash"]["sketch"]["s"]
     threads: 6
     shell:
         """
-        mash sketch -i -k {params.k} -s {params.s} -p {threads} -o {params.prefix} {input[0]}
+        mash sketch -i -k {wildcards.mash_k} -s {wildcards.mash_s} -p {threads} -o {params.prefix} {input[0]}
         """
 
 
 rule mash_dist:
     input:
-        msh="results/mash/{genome_fasta}.fa.msh",
+        msh="results/mash/{genome_fasta}.k{mash_k}.s{mash_s}.fa.msh",
     output:
-        tsv="results/mash/{genome_fasta}.d0.3.k15.s25000.tsv",
+        tsv="results/mash/{genome_fasta}.k{mash_k}.s{mash_s}.d{mash_d}.tsv",
     conda:
         "envs/mash.yaml"
-    params:
-        d=config["mash"]["dist"]["d"]
     threads: 6
     shell:
         """
-        mash dist -i -d {params.d} -p {threads} {input.msh} {input.msh} \
+        mash dist -i -d {wildcards.mash_d} -p {threads} {input.msh} {input.msh} \
         > {output.tsv}
         """
