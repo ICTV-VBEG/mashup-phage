@@ -13,9 +13,13 @@ The usage of this workflow is described in the [Snakemake Workflow Catalog](http
 
 If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) mashup-phagesitory and its DOI (see above).
 
-# TODO
+# TODO for workflow implementation
 
-* Replace `ICTV-VBEG` and `mashup-phage` everywhere in the template (also under .github/workflows) with the correct `mashup-phage` name and owning user or organization.
-* Replace `mashup-phage` with the workflow name (can be the same as `mashup-phage`).
-* Replace `louvain community partitioning of mash distances ` with a description of what the workflow does.
-* The workflow will occur in the snakemake-workflow-catalog once it has been made public. Then the link under "Usage" will point to the usage instructions if `ICTV-VBEG` and `mashup-phage` were correctly set.
+Our general aims are to:
+
+1. Follow the best practices regarding snakemake workflow folder structures: https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#distribution-and-reproducibility
+2. Use conda environments for automated software installation: https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+3. Use snakemake wrappers for any steps where they are available: https://snakemake-wrappers.readthedocs.io/
+4. Enable automatic inclusion of the workflow in the snakemake workflow catalog (this should work out-of-the-box, standardized usage can be enabled later): https://snakemake.github.io/snakemake-workflow-catalog/?rules=true
+5. Use the example data provided for automated testing (continuous integration) of workflow functionality in a `.test/` folder and using GitHub Actions.
+
