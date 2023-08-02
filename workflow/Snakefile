@@ -34,7 +34,7 @@ rule mash_sketch:
         prefix=lambda wc, output: os.path.splitext(output.msh)[0],
     conda:
         "envs/mash.yaml"
-    threads: 6
+    threads: workflow.cores
     shell:
         """
         mash sketch -i -k {wildcards.mash_k} -s {wildcards.mash_s} -p {threads} -o {params.prefix} {input[0]}
@@ -48,7 +48,7 @@ rule mash_dist:
         tsv="results/mash/{genome_fasta}.k{mash_k}.s{mash_s}.d{mash_d}.tsv",
     conda:
         "envs/mash.yaml"
-    threads: 6
+    threads: workflow.cores
     shell:
         """
         mash dist -i -d {wildcards.mash_d} -p {threads} {input.msh} {input.msh} \
