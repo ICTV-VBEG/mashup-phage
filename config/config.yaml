@@ -1,0 +1,9 @@
+
+mash:
+  # for explanations of the command line arguments specified here,
+  # please refer to the command line help message of mash
+  sketch:
+    k: 15
+    s: 25000
+  dist:
+    d: 0.3
