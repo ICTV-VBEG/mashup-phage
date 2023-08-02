@@ -2,8 +2,9 @@
 import os
 
 rule all:
-     input:
-        tsv="results/mash/2Jul2023_refseq_genomes.d0.3.k15.s25000.tsv"
+    input:
+        tsv="results/mash/three-aeromonas-phage-genomes.d0.3.k15.s25000.tsv"
+        #tsv="results/mash/2Jul2023_refseq_genomes.d0.3.k15.s25000.tsv"
 
 
 rule download:
