@@ -33,7 +33,7 @@ The Inphared refseq genomes dataset is a subset of genome files and is much smal
 
 ```bash
 wget https://millardlab-inphared.s3.climb.ac.uk/2Jul2023_refseq_genomes.fa.gz    
-gunzip https://millardlab-inphared.s3.climb.ac.uk/2Jul2023_refseq_genomes.fa.gz
+gunzip 2Jul2023_refseq_genomes.fa.gz
 ```
 
 ## 2. Data processing with [Mash](https://github.com/marbl/Mash)  

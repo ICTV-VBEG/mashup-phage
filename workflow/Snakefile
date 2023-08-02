@@ -1,4 +1,49 @@
-# Main entrypoint of the workflow. 
-# Please follow the best practices: 
-# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there. 
+
+import os
+
+rule all:
+    input:
+        tsv="results/mash/three-aeromonas-phage-genomes.d0.3.k15.s25000.tsv"
+        #tsv="results/mash/2Jul2023_refseq_genomes.d0.3.k15.s25000.tsv"
+
+
+rule download:
+     output:
+        "resources/{genome_fasta}.fa",
+     shell:
+        """
+        curl -O https://millardlab-inphared.s3.climb.ac.uk/{wildcards.genome_fasta}.fa.gz;
+        gunzip {wildcards.genome_fasta}.fa.gz;
+        mv {wildcards.genome_fasta}.fa {output[0]}
+        """
+
+rule mash_sketch:
+     input:
+        "resources/{genome_fasta}.fa",
+     output:
+        msh="results/mash/{genome_fasta}.fa.msh",
+     params:
+        prefix=lambda wc , output: os.path.splitext( output.msh )[0],
+     conda:
+        "envs/mash.yaml"
+     threads:
+          6
+     shell:
+        """
+        mash sketch -i -k 15 -s 25000 -p {threads} -o {params.prefix} {input[0]}
+        """
+
+rule mash_dist:
+     input:
+        msh="results/mash/{genome_fasta}.fa.msh",
+     output:
+        tsv="results/mash/{genome_fasta}.d0.3.k15.s25000.tsv"
+     conda:
+        "envs/mash.yaml"
+     threads:
+          6
+     shell:
+        """
+        mash dist -i -d 0.3 -p {threads} {input.msh} {input.msh} \
+        > {output.tsv}
+        """
