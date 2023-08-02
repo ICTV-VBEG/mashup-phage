@@ -1,4 +1,4 @@
-inphared_genomes: "2Jul2023_refseq_genomes"
+inphared_genomes: "three-aeromonas-phage-genomes"
 
 mash:
   # for explanations of the command line arguments specified here,

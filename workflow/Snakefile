@@ -3,12 +3,12 @@ import os
 
 rule all:
     input:
-        #tsv="results/mash/2Jul2023_refseq_genomes.d0.3.k15.s25000.tsv"
         tsv=expand(
-            "results/mash/three-aeromonas-phage-genomes.s{mash_s}.k{mash_k}.s{mash_s}.tsv",
-            mash_k=config["mash"]["sketch"]["k"]
-            mash_s=config["mash"]["sketch"]["s"]
-            mash_d=config["mash"]["dist"]["d"]
+            "results/mash/{genome_fasta}.s{mash_s}.k{mash_k}.s{mash_s}.tsv",
+            genome_fasta=config["inphared_genomes"],
+            mash_k=config["mash"]["sketch"]["k"],
+            mash_s=config["mash"]["sketch"]["s"],
+            mash_d=config["mash"]["dist"]["d"],
         ),
 
 
