@@ -18,6 +18,8 @@ rule all:
 rule download:
     output:
         fa="resources/{genome_fasta}.fa",
+    log:
+        "logs/resources/{genome_fasta}.download.log"    
     conda:
         "envs/curl_pigz.yaml"
     shell:
@@ -28,9 +30,11 @@ rule download:
 
 rule mash_sketch:
     input:
-        "resources/{genome_fasta}.fa",
+        fa="resources/{genome_fasta}.fa",
     output:
         msh="results/mash/{genome_fasta}.k{mash_k}.s{mash_s}.fa.msh",
+    log:
+        "logs/mash/{genome_fasta}.k{mash_k}.s{mash_s}.fa.mash_sketch.log",
     params:
         prefix=lambda wc, output: os.path.splitext(output.msh)[0],
     conda:
@@ -38,7 +42,7 @@ rule mash_sketch:
     threads: workflow.cores
     shell:
         """
-        mash sketch -i -k {wildcards.mash_k} -s {wildcards.mash_s} -p {threads} -o {params.prefix} {input[0]}
+        mash sketch -i -k {wildcards.mash_k} -s {wildcards.mash_s} -p {threads} -o {params.prefix} {input.fa}
         """
 
 
@@ -47,6 +51,8 @@ rule mash_dist:
         msh="results/mash/{genome_fasta}.k{mash_k}.s{mash_s}.fa.msh",
     output:
         tsv="results/mash/{genome_fasta}.k{mash_k}.s{mash_s}.d{mash_d}.tsv",
+    log:
+        "logs/mash/{genome_fasta}.k{mash_k}.s{mash_s}.d{mash_d}.mash_dist.log",
     conda:
         "envs/mash.yaml"
     threads: workflow.cores
