@@ -1,6 +1,8 @@
 import os
 
+
 configfile: "config/config.yaml"
+
 
 rule all:
     input:
@@ -19,7 +21,7 @@ rule download:
     output:
         fa="resources/{genome_fasta}.fa",
     log:
-        "logs/resources/{genome_fasta}.download.log"    
+        "logs/resources/{genome_fasta}.download.log",
     conda:
         "envs/curl_pigz.yaml"
     shell:
