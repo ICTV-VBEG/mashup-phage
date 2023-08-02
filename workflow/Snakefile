@@ -16,12 +16,12 @@ rule all:
 #       https://github.com/snakemake/snakemake-wrappers/pull/1550
 rule download:
     output:
-        "resources/{genome_fasta}.fa",
+        fa="resources/{genome_fasta}.fa",
+    conda:
+        "envs/curl_pigz.yaml"
     shell:
         """
-        curl -O https://millardlab-inphared.s3.climb.ac.uk/{wildcards.genome_fasta}.fa.gz;
-        gunzip {wildcards.genome_fasta}.fa.gz;
-        mv {wildcards.genome_fasta}.fa {output[0]}
+        curl https://millardlab-inphared.s3.climb.ac.uk/{wildcards.genome_fasta}.fa.gz | pigz -d >{output.fa}
         """
 
 
