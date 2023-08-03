@@ -7,7 +7,7 @@ configfile: "config/config.yaml"
 rule all:
     input:
         tsv=expand(
-            "results/mash/{genome_fasta}.s{mash_s}.k{mash_k}.d{mash_d}.tsv",
+            "results/mash/{genome_fasta}.k{mash_k}.s{mash_s}.d{mash_d}.tsv",
             genome_fasta=config["inphared_genomes"],
             mash_k=config["mash"]["sketch"]["k"],
             mash_s=config["mash"]["sketch"]["s"],
