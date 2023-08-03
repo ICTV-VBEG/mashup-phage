@@ -29,12 +29,15 @@ The aim of this tool is to ascertain whether MASH distances, in combination with
 A systematic evaluation of varying distance, hashes and p-value thresholds is currently underway, so the defaults are the best guess from assessment of correlation between these parameters and ANI or VIRIDIC measures of similarity.
 
 ## 1. Download dataset
-The Inphared refseq genomes dataset is a subset of genome files and is much smaller than the _excluding_refseq file that I normally use:
 
+* [x] TODO: implement rule for data download
+
+The Inphared refseq genomes dataset is a subset of genome files and is much smaller than the _excluding_refseq file that I normally use:
 ```bash
 wget https://millardlab-inphared.s3.climb.ac.uk/2Jul2023_refseq_genomes.fa.gz    
 gunzip 2Jul2023_refseq_genomes.fa.gz
 ```
+* [x] TODO: create minimal testing data set
 
 ## 2. Data processing with [Mash](https://github.com/marbl/Mash)  
 First, create sketches for records in inphared dataset, then create a file of calculated distances 
@@ -49,9 +52,14 @@ Variables include
 mash sketch -i -k 15 -s 25000 -p 24 2Jul2023_refseq_genomes.fa
 mash dist -i -d 0.3 -p 24 2Jul2023_refseq_genomes.fa.msh 2Jul2023_refseq_genomes.fa.msh > 2Jul2023.refseq.d0.3.k15.s25000.tsv
 ```
+* [x] TODO: implement rule for `mash sketch`
+* [x] TODO: implement rule for `mash dist`
+* [x] TODO: set up automatic testing via GitHub workflow
 
 ## 3. MASHUP
 See accompanying code and requirements in
+
+* [ ] TODO: flesh out actual todos for this step, based on scripts in the web app
 
 Explanation of process:
 > 1. Input mash tsv file is parsed, removing self-matches where the distance will be 0, i.e. binA=binB
